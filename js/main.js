@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-03-04 20:50:20
- * @LastEditTime: 2020-03-06 22:19:33
+ * @LastEditTime: 2020-03-09 22:01:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /oneslide/css/main.js
@@ -111,6 +111,60 @@ const Menu = {
 }
 
 
+const ImgUploader = {
+  init() {
+    this.$fileInput = $('#img-uploader')
+    this.$textarea = $('.editor textarea')
+
+    AV.init({
+      appId: "UqBaAsQMqOQB3rLwNGLTKtOF-gzGzoHsz",
+      appKey: "uv9EyQmkgX7UjUt4TeVUBhVa",
+      serverURLs: "https://uqbaasqm.lc-cn-n1-shared.com"
+    })
+
+    this.bind()
+  },
+
+  bind() {
+    let self = this
+    this.$fileInput.onchange = function() {
+      if (this.files.length > 0) {
+        let localFile = this.files[0]
+        console.log(localFile)
+        if(localFile.size/1048576 > 2) {
+          alert('文件不能超过2M')
+          return
+        }
+        self.insertText(`![上传中，进度0%]()`)
+        let  avFile = new AV.File(encodeURI(localFile.name), localFile)
+        avFile.save({ 
+          keepFileName: true, 
+          onprogress(progress) {
+            self.insertText(`![上传中，进度${progress.percent}%]()`)
+          }
+        }).then(file => {
+          console.log('文件保存完成')
+          console.log(file)
+          let text = `![${file.attributes.name}](${file.attributes.url}?imageView2/0/w/800/h/400)`
+          self.insertText(text)
+        }).catch(err => console.log(err))
+       }     
+    }
+  },
+
+  insertText(text = '') {
+    let $textarea = this.$textarea
+    let start = $textarea.selectionStart
+    let end = $textarea.selectionEnd
+    let oldText = $textarea.value
+
+    $textarea.value = `${oldText.substring(0, start)}${text} ${oldText.substring(end)}`
+    $textarea.focus()
+    $textarea.setSelectionRange(start, start + text.length) 
+  }
+}
+
+
 const Editor = {
   init() {
     console.log('Editor init...')
@@ -214,11 +268,14 @@ const Print =  {
     this.$download.addEventListener('click', () => {
       let $link = document.createElement('a')
       $link.setAttribute('target', '_blank')
-      $link.setAttribute('href', location.href.replace(/#\/.+/, '?print-pdf'))
+      $link.setAttribute('href', location.href.replace(/#\/.*/, '?print-pdf'))
       $link.click()
     })
 
-    window.onafterprint = () => window.close()
+    window.onafterprint = () => {
+      console.log('close')
+      window.close()
+    }
   },
 
   start() {
@@ -241,7 +298,7 @@ const App = {
   }
 }
 
-App.init(Menu, Editor, Theme, Print)
+App.init(Menu, ImgUploader, Editor, Theme, Print)
 
 
 

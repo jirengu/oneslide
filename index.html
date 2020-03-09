@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-02-24 18:15:46
- * @LastEditTime: 2020-03-06 22:10:44
+ * @LastEditTime: 2020-03-09 22:04:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /oneslide/demo.html
@@ -12,7 +12,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>reveal.js – The HTML Presentation Framework</title>
+		<title>OneSlide——极简 Markdown PPT</title>
 
 		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
 		<meta name="author" content="Hakim El Hattab">
@@ -31,7 +31,7 @@
 
 		<link rel="stylesheet" href="css/main.css">
 
-		<link rel="stylesheet" href="//at.alicdn.com/t/font_1671731_airz5iu22io.css">
+		<link rel="stylesheet" href="//at.alicdn.com/t/font_1671731_c59ds6lenil.css">
 
 		<!-- Printing and PDF exports -->
 		<script>
@@ -63,10 +63,15 @@
 				<div class="tab active"><span class="iconfont icon-edit"></span>内容编辑</div>
 				<div class="tab"><span class="iconfont icon-theme"></span>主题与特效</div>
 				<div class="tab download"><span class="iconfont icon-download"></span>下载PDF</div>
+				<div class="tab "><span class="iconfont icon-speaker"></span>演讲者模式</div>
 				<div class="content active">
 					<div class="header">编辑</div>
 					<div class="body editor">
 						<textarea></textarea>
+						<div class="uploader">
+							<input type="file" id="img-uploader" accept="image/*">
+							<label for="img-uploader">点击上传图片(支持.png、.jpg、.gif，最大2M)</label>
+						</div>
 						<div>
 							<button class="button-save">保存</button>
 						</div>
@@ -146,6 +151,12 @@
 						<p>下载PDF</p>
 					</div>
 				</div>
+				<div class="content">
+					<div class="header">演讲者模式</div>
+					<div class="body speaker">
+						<p>按 <strong>S</strong> 键， 开启演讲者模式</p>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="reveal">
@@ -153,7 +164,7 @@
 			<div class="slides">
 			</div>
 		</div>
-
+		<script src="//cdn.jsdelivr.net/npm/leancloud-storage@4.2.0/dist/av-min.js"></script>
 		<script src="js/reveal.js"></script>
 		<script src="js/main.js"></script>
 
